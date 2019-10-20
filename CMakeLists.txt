@@ -1,16 +1,19 @@
 cmake_minimum_required(VERSION 3.15)
-project(fromScratch C CXX ASM)
+project(nrf52-baseproject C CXX ASM)
 
 set(NRF_TARGET "nrf52")
 
-# optional, won't be used if passing toolchain on command line (see below)
-if (NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_PATH)
-  set(ARM_NONE_EABI_TOOLCHAIN_PATH "/usr/local/bin")
+if (NOT ARM_NONE_EABI_TOOLCHAIN_PATH)
+  message(FATAL_ERROR "The path to the toolchain (arm-non-eabi) must be specified on the command line (add -DARM_NONE_EABI_TOOLCHAIN_PATH=<path>")
 endif ()
 
-set(ARM_NONE_EABI_TOOLCHAIN_PATH "/home/jf/nrf52/gcc-arm-none-eabi-8-2019-q3-update")
-set(NRF5_SDK_PATH "/home/jf/nrf52/nRF5_SDK_15.3.0_59ac345")
-set(NRFJPROG "${CMAKE_SOURCE_DIR}/toolchains/nRF5/nrfjprog/nrfjprog")
+if (NOT NRF5_SDK_PATH)
+  message(FATAL_ERROR "The path to the NRF52 SDK must be specified on the command line (add -DNRF52_SDK_PATH=<path>")
+endif ()
+
+if (NOT NRFJPROG)
+  message(FATAL_ERROR "the path to the tool nrfjprog must be specified on the command line (add -DNRFJPROG=<path>")
+endif ()
 
 include("cmake-nRF5x/CMake_nRF5x.cmake")
 add_subdirectory(src)

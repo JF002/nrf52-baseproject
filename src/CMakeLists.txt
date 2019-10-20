@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(JFExample C CXX ASM)
+project(application-example C CXX ASM)
 
 # define some variables just for this example to determine file locations
-set(NRF_PROJECT_NAME JFExample)
+set(NRF_PROJECT_NAME application-example)
 set(NRF_BOARD pca10040)
 #set(NRF_SOFTDEVICE s132)
 
@@ -26,4 +26,4 @@ add_definitions(-DCONFIG_GPIO_AS_PINRESET)
 include_directories(.)
 list(APPEND SOURCE_FILES main.cpp)
 
-nRF5x_addExecutable(JFExample "${SOURCE_FILES}")
+nRF5x_addExecutable(application-example "${SOURCE_FILES}")
