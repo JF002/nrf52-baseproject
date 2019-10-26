@@ -50,6 +50,9 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <nrfx_log.h>
+#include <libraries/log/nrf_log_ctrl.h>
+#include <libraries/log/nrf_log_default_backends.h>
 #include "nrf_delay.h"
 #include "boards.h"
 
@@ -60,20 +63,26 @@
  */
 int main(void)
 {
-    /* Configure board. */
-    bsp_board_init(BSP_INIT_LEDS);
+  /* Configure board. */
+  bsp_board_init(BSP_INIT_LEDS);
 
-//  std::vector<int> toto {1,2,3,4};
+  NRF_LOG_INIT(nullptr);
+  NRF_LOG_DEFAULT_BACKENDS_INIT();
 
-    /* Toggle LEDs. */
-    while (true)
+  /* Toggle LEDs. */
+  while (true)
+  {
+    NRF_LOG_PROCESS();
+    for (int i = 0; i < LEDS_NUMBER; i++)
     {
-        for (int i = 0; i < LEDS_NUMBER; i++)
-        {
-            bsp_board_led_invert(i);
-            nrf_delay_ms(500);
-        }
+        bsp_board_led_invert(i);
+
+        nrf_delay_ms(200);
+
     }
+    NRF_LOG_INFO("coucou\n");
+    NRF_LOG_FLUSH();
+  }
 }
 
 /**
