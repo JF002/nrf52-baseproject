@@ -21,6 +21,7 @@ nRF5x_addBSP(FALSE FALSE FALSE)
 #nRF5x_addBLEService(ble_lbs)
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
+add_definitions(-DDEBUG)
 
 
 include_directories(.)

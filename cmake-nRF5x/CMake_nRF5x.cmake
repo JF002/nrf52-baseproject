@@ -70,10 +70,12 @@ macro(nRF5x_setup)
         endif()
         set(CPU_FLAGS "-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
         add_definitions(-DNRF52 -DNRF52832 -DNRF52832_XXAA -DNRF52_PAN_74 -DNRF52_PAN_64 -DNRF52_PAN_12 -DNRF52_PAN_58 -DNRF52_PAN_54 -DNRF52_PAN_31 -DNRF52_PAN_51 -DNRF52_PAN_36 -DNRF52_PAN_15 -DNRF52_PAN_20 -DNRF52_PAN_55 -DBOARD_PCA10040)
-        add_definitions(-DSWI_DISABLE0 -DBLE_STACK_SUPPORT_REQD -DNRF_SD_BLE_API_VERSION=6)
+        add_definitions(-DSOFTDEVICE_PRESENT -DS132 -DSWI_DISABLE0 -DBLE_STACK_SUPPORT_REQD -DNRF_SD_BLE_API_VERSION=6)
+        add_definitions(-DFREERTOS)
+
         include_directories(
                 "${NRF5_SDK_PATH}/components/softdevice/s132/headers"
-#                "${NRF5_SDK_PATH}/components/softdevice/s132/headers/nrf52"
+                "${NRF5_SDK_PATH}/components/softdevice/s132/headers/nrf52"
         )
         list(APPEND SDK_SOURCE_FILES
                 "${NRF5_SDK_PATH}/modules/nrfx/mdk/system_nrf52.c"
@@ -248,6 +250,60 @@ macro(nRF5x_setup)
             "${NRF5_SDK_PATH}/external/fprintf/nrf_fprintf.c"
             "${NRF5_SDK_PATH}/external/fprintf/nrf_fprintf_format.c"
             )
+
+    #BLE S132
+    include_directories(
+      "${NRF5_SDK_PATH}/components/ble/common"
+      "${NRF5_SDK_PATH}/components/ble/ble_advertising"
+      "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas"
+      "${NRF5_SDK_PATH}/components/ble/ble_services/ble_hrs"
+      "${NRF5_SDK_PATH}/components/ble/ble_services/ble_dis"
+      "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt"
+      "${NRF5_SDK_PATH}/components/libraries/sensorsim"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager"
+      "${NRF5_SDK_PATH}/components/ble/nrf_ble_qwr"
+    )
+
+    LIST(APPEND SDK_SOURCE_FILES
+      "${NRF5_SDK_PATH}//components/ble/common/ble_srv_common.c"
+      "${NRF5_SDK_PATH}/components/ble/ble_advertising/ble_advertising.c"
+      "${NRF5_SDK_PATH}/components/ble/common/ble_advdata.c"
+      "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas/ble_bas.c"
+      "${NRF5_SDK_PATH}/components/ble/ble_services/ble_hrs/ble_hrs.c"
+      "${NRF5_SDK_PATH}/components/ble/ble_services/ble_dis/ble_dis.c"
+      "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt/nrf_ble_gatt.c"
+      "${NRF5_SDK_PATH}/components/libraries/sensorsim/sensorsim.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_manager.c"
+      "${NRF5_SDK_PATH}/components/ble/nrf_ble_qwr/nrf_ble_qwr.c"
+      "${NRF5_SDK_PATH}/components/ble/common/ble_conn_state.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/auth_status_tracker.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/gatt_cache_manager.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/gatts_cache_manager.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/id_manager.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_data_storage.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_database.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_id.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_manager.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_manager_handler.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/pm_buffer.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/security_dispatcher.c"
+      "${NRF5_SDK_PATH}/components/ble/peer_manager/security_manager.c"
+      "${NRF5_SDK_PATH}/components/ble/common/ble_conn_state.c"
+      "${NRF5_SDK_PATH}/components/ble/common/ble_conn_params.c"
+      "${NRF5_SDK_PATH}/components/ble/common/ble_conn_state.c"
+      "${NRF5_SDK_PATH}/components/libraries/atomic_flags/nrf_atflags.c"
+      "${NRF5_SDK_PATH}/components/libraries/fds/fds.c"
+      "${NRF5_SDK_PATH}/components/libraries/fstorage/nrf_fstorage.c"
+      "${NRF5_SDK_PATH}/components/libraries/fstorage/nrf_fstorage_sd.c"
+      "${NRF5_SDK_PATH}/components/libraries/atomic_fifo/nrf_atfifo.c"
+      "${NRF5_SDK_PATH}/components/softdevice/common/nrf_sdh.c"
+      "${NRF5_SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c"
+      "${NRF5_SDK_PATH}/components/softdevice/common/nrf_sdh_freertos.c"
+      "${NRF5_SDK_PATH}/components/softdevice/common/nrf_sdh_soc.c"
+      "${NRF5_SDK_PATH}/components/libraries/experimental_section_vars/nrf_section_iter.c"
+      "${NRF5_SDK_PATH}/components/libraries/bsp/bsp_btn_ble.c"
+      "${NRF5_SDK_PATH}/components/libraries/hardfault/hardfault_implementation.c"
+      )
 
 
     # adds target for erasing and flashing the board with a softdevice
